@@ -1,0 +1,53 @@
+--Number of entries from Africa:
+SELECT COUNT(*) 
+FROM countries
+WHERE continent = 'Africa';
+
+--Total population of the continent of Oceania in 2005
+WITH country_pop AS (
+SELECT * 
+FROM population_years
+JOIN countries
+	ON population_years.country_id = countries.id
+)
+SELECT SUM(population) 
+FROM country_pop
+WHERE continent = 'Oceania' and year = '2005';
+
+--Average population of countries in South America in 2003
+WITH country_pop AS (
+SELECT * 
+FROM population_years
+JOIN countries
+	ON population_years.country_id = countries.id
+)
+SELECT ROUND(AVG(population), 2) 
+FROM country_pop
+WHERE continent = 'South America' AND year = '2003';
+
+--Smallest population in 2007
+SELECT countries.name, countries.continent, MIN(population_years.population)
+FROM countries
+JOIN population_years
+	ON population_years.country_id = countries.id
+WHERE population_years.year = 2007;
+	
+--Average population of Poland throughout all time periods in table:
+SELECT countries.name, ROUND(AVG(population_years.population), 2)
+FROM countries
+JOIN population_years
+	ON population_years.country_id = countries.id
+WHERE countries.name = 'Poland';
+
+-- Number of countries that have the word 'The' in the name:
+SELECT name
+FROM countries
+WHERE name LIKE '%The%';
+
+--Total population of each continent in 2010:
+SELECT countries.continent, SUM(population_years.population)
+FROM countries
+JOIN population_years
+	ON countries.id = population_years.country_id
+WHERE population_years.year = '2010'
+GROUP BY countries.continent;
